@@ -52,14 +52,14 @@ aws iam create-policy     --policy-name AWSLoadBalancerControllerIAMPolicy     -
 
 eksctl create iamserviceaccount   --cluster=three-tier-cluster-1   --namespace=kube-system   --name=aws-load-balancer-controller   --role-name AmazonEKSLoadBalancerControllerRole --attach-policy-arn=arn:aws:iam::777544701073:policy/AWSLoadBalancerControllerIAMPolicy   --approve
 ```
- ### now go 
+ ### now add helm repo
 ```
 helm repo add eks https://aws.github.io/eks-charts
 helm repo update eks
 
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=three-tier-cluster --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller --set region=us-east-1 --set vpcId=vpc-0145c9c9f06133263
 ```
-##### Confirm that the deployments are running successfully by checking the AWS Load Balancer Controller deployment in the kube-system namespace.
+### Confirm that the deployments are running successfully by checking the AWS Load Balancer Controller deployment in the kube-system namespace.
 
 ```
 kubectl get deployment -n kube-system aws-load-balancer-controller
@@ -70,17 +70,18 @@ eksctl create iamserviceaccount     --name ebs-csi-controller-sa     --namespace
 
 eksctl create addon --name aws-ebs-csi-driver --cluster three-tier-cluster-1 --service-account-role-arn arn:aws:iam::777544701073:role/AmazonEKS_EBS_CSI_DriverRole --force
 ```
-#### now go to our eks helm folder, where we have already setup our projects deployment and service yaml file
-
+### now go to our eks helm folder, where we have already setup our projects deployment and service yaml file
+```
 cd EKS/
 ls
 cd helm/
 ls
+```
 ### create namsepsace 
 ```
 kubectl create ns robot-shop
 ```
-##### Executing this command deploys the entire Robot Shop project, utilizing the Helm chart to manage each component seamlessly.
+### Executing this command deploys the entire Robot Shop project, utilizing the Helm chart to manage each component seamlessly.
 ```
 helm install robot-shop --namespace robot-shop .
 ```
@@ -89,7 +90,7 @@ helm install robot-shop --namespace robot-shop .
 kubectl get pods -n robot-shop
 kubectl get svc -n robot-shop
 ```
-##### Two options exist for exposing the application externally: through a Load Balancer or via an Ingress Controller. Since an Ingress Controller is already set up, we opt for this method.
+### Two options exist for exposing the application externally: through a Load Balancer or via an Ingress Controller. Since an Ingress Controller is already set up, we opt for this method.
 ```
 ls
 cat ingress.yaml
